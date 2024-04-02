@@ -1,0 +1,18 @@
+{
+    "singleQuote": true,
+    "semi": false,
+    "vueIndentScriptAndStyle": true,
+    "tabWidth": 4,
+    "useTabs": true,
+    "printWidth": 80,
+    "endOfLine": "auto",
+    "overrides": [
+        {
+            "files": "*.ts",
+            "options": {
+                "printWidth": 160,
+                "useTabs": false
+            }
+        }
+    ]
+}
