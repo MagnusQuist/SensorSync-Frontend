@@ -11,31 +11,34 @@ export const routes: RouteRecordRaw[] = [
             {
                 name: 'dashboard',
                 path: '/dashboard',
-                component: () => import('@/views/Dashboard.vue'),
+                component: () => import('@/views/dashboard/Dashboard.vue'),
                 meta: {
                     title: 'Dashboard',
                     showInMenu: true,
-                    iconName: 'dashboard',
+                    iconName: 'material-symbols-light:dashboard-rounded',
+                    variant: 'default'
                 }
             },
             {
                 name: 'devices',
                 path: '/devices',
-                component: () => import('@/views/Dashboard.vue'),
+                component: () => import('@/views/dashboard/Dashboard.vue'),
                 meta: {
                     title: 'Devices',
                     showInMenu: true,
-                    iconName: 'device',
+                    iconName: 'material-symbols-light:device-hub-rounded',
+                    variant: 'ghost'
                 }
             },
             {
-                name: 'organization',
-                path: '/organization',
-                component: () => import('@/views/Dashboard.vue'),
+                name: 'firmware',
+                path: '/firmware',
+                component: () => import('@/views/dashboard/Dashboard.vue'),
                 meta: {
-                    title: 'Organization',
+                    title: 'Firmware',
                     showInMenu: true,
-                    iconName: 'organization',
+                    iconName: 'material-symbols-light:cloud-upload',
+                    variant: 'ghost'
                 }
             }
         ]
@@ -43,17 +46,20 @@ export const routes: RouteRecordRaw[] = [
     {
         name: 'login',
         path: '/login',
-        component: () => import('@/views/LoginPage.vue'),
+        component: () => import('@/views/auth/LoginView.vue'),
         meta: {
-            title: 'Login'
+            title: 'Login',
+            openEndpoint: true
         }
     },
     {
         name: 'register',
         path: '/register',
-        component: () => import('@/views/RegisterPage.vue'),
+        component: () => import('@/views/auth/RegisterView.vue'),
         meta: {
-            title: 'Register'
+            title: 'Register',
+            openEndpoint: true
+
         }
     },
     {

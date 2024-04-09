@@ -1,42 +1,76 @@
 <template>
-    <div class="flex flex-col h-full w-64 overflow-hidden text-gray-300 bg-gray-950 p-6">
-        <span class="text-sm font-bold">ATHENA Fleet</span>
-        <div class="w-full mt-2">
-            <div class="flex flex-col w-full mt-3 border-t border-gray-900">
-                <div v-for="(route, index) in appRoutes" :key="index">
-                    <RouterLink :to="route.path"
-                        class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-900 hover:text-gray-200">
-                        <Icon v-if="route.meta?.iconName" :name="String(route.meta.iconName)" />
-                        <span class="text-sm font-medium">{{ route.meta?.title }}</span>
-                    </RouterLink>
-                </div>
+    <TooltipProvider :delay-duration="0">
+        <div class="min-w-[220px] border-r-slate-100 border-r">
+            <div class="border-b-slate-100 border-b py-4 px-2">
+                <h1 class="text-xl font-semibold tracking-tight">
+                    Sensor Sync
+                    <span class="text-muted-foreground text-xs">v1.0.0</span>
+                </h1>
+            </div>
+            <div :data-collapsed="isCollapsed" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
+                <nav
+                    class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+                    <template v-for="(link, index) of links">
+                        <Tooltip v-if="isCollapsed" :key="`1-${index}`" :delay-duration="0">
+                            <TooltipTrigger as-child>
+                                <RouterLink :to="link.path" :activeClass="cn(buttonVariants({ variant: 'default' }))">
+                                    <Icon :icon="link.meta.iconName" class="size-6" />
+                                    <span class="sr-only">{{ link.meta.title }}</span>
+                                </RouterLink>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" class="flex items-center gap-4">
+                                {{ link.meta.title }}
+                                <span v-if="link.meta.label" class="ml-auto text-muted-foreground">
+                                    {{ link.meta.label }}</span>
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <RouterLink :to="link.path" v-else :key="`2-${index}`"
+                            :exactActiveClass="cn(buttonVariants({ variant: 'default', size: 'sm' }), 'hover:text-white justify-start')"
+                            :class="cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'justify-start')">
+                            <Icon :icon="link.meta.iconName" class="mr-2 size-6" />
+                            {{ link.meta.title }}
+                            <span v-if="link.meta.label"
+                                :class="cn('ml-auto', link.meta.variant === 'default' && 'text-background',)">
+                                {{ link.meta.label }}
+                            </span>
+                        </RouterLink>
+                    </template>
+                </nav>
             </div>
         </div>
-    </div>
+    </TooltipProvider>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router'
-import Icon from '@/components/icon/BaseIcon.vue'
+<script lang="ts" setup>
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '../ui/button'
+import { Icon } from '@iconify/vue'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
+import TooltipProvider from '../ui/tooltip/TooltipProvider.vue'
 
-const router = useRouter()
+export interface LinkProp {
+    path: string,
+    meta: {
+        showInMenu: boolean,
+        iconName: string,
+        variant: 'default' | 'ghost',
+        title: string,
+        label?: string,
+    },
+}
 
-const appRoutes = ref(
-    router.options.routes
-        .find((route) => route.path === '/')
-        ?.children?.filter(
-            (route) => route.meta?.showInMenu
-        ),
-)
+interface Props {
+    isCollapsed: boolean
+    links: LinkProp[]
+}
 
+defineProps<Props>()
 
 </script>
 
-<style lang="scss" scoped>
-svg {
-    transform: scale(0.6);
-    margin-right: .8rem;
-    fill: rgb(209 213 219);
-}
-</style>
+<style scoped lang="scss"></style>
