@@ -25,10 +25,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }} .
-          docker tag ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }} ghcr.io/${OWNER_LC}/your_image_name:latest
+          docker build -t ghcr.io/${OWNER_LC}/sensorsync-frontend:${{ github.sha }} .
+          docker tag ghcr.io/${OWNER_LC}/sensorsync-frontend:${{ github.sha }} ghcr.io/${OWNER_LC}/sensorsync-frontend:latest
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }}
-          docker push ghcr.io/${OWNER_LC}/your_image_name:latest
+          docker push ghcr.io/${OWNER_LC}/sensorsync-frontend:${{ github.sha }}
+          docker push ghcr.io/${OWNER_LC}/sensorsync-frontend:latest
