@@ -17,8 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@components": path.resolve(__dirname, "src/components"),
       Routes: fileURLToPath(new URL('/src/app/router/Routes.ts', import.meta.url))
     }
-  }
+  },
 })

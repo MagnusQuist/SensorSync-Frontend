@@ -33,4 +33,4 @@ export class API {
     }
 }
 
-export default new API('http://localhost:8285')
+export default new API(import.meta.env.VITE_GATEWAY_URL)

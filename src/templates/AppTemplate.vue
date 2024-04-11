@@ -8,23 +8,29 @@
 </template>
 
 <script setup lang="ts">
-import TheSidebar from '@/components/navigation/TheSidebar.vue'
+import TheSidebar from '@/components/navigation/TheSideBar.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { NavigationLink } from '@/types/NavigationLink';
 
 const router = useRouter()
 
 const links = ref(
-    router.options.routes
+    (router.options.routes
         .find((route) => route.path === '/')
         ?.children?.filter(
             (route) => route.meta?.showInMenu
-        ),
-)
-
-console.log(links)
-
-
+        ) ?? []).map(route => ({
+            path: route.path,
+            meta: {
+                showInMenu: route.meta?.showInMenu ?? false,
+                iconName: route.meta?.iconName ?? '',
+                variant: route.meta?.variant ?? 'default',
+                title: route.meta?.title ?? '',
+                label: route.meta?.label ?? '',
+            }
+        })) as NavigationLink[],
+);
 </script>
 
 <style scoped>

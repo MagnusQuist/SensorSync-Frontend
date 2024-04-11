@@ -52,21 +52,11 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 import TooltipProvider from '../ui/tooltip/TooltipProvider.vue'
-
-export interface LinkProp {
-    path: string,
-    meta: {
-        showInMenu: boolean,
-        iconName: string,
-        variant: 'default' | 'ghost',
-        title: string,
-        label?: string,
-    },
-}
+import { NavigationLink } from '@/types/NavigationLink'
 
 interface Props {
     isCollapsed: boolean
-    links: LinkProp[]
+    links: NavigationLink[]
 }
 
 defineProps<Props>()
