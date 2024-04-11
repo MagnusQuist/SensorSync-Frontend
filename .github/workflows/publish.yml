@@ -12,13 +12,23 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.REGISTRY_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER@L}" >> "${GITHUB_ENV}"
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/your_image_name:${{ github.sha }} .
+        run: |
+          docker build -t ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }} .
+          docker tag ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }} ghcr.io/${OWNER_LC}/your_image_name:latest
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/your_image_name:${{ github.sha }}
+        run: |
+          docker push ghcr.io/${OWNER_LC}/your_image_name:${{ github.sha }}
+          docker push ghcr.io/${OWNER_LC}/your_image_name:latest
