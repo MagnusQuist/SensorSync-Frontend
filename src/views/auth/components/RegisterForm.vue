@@ -3,10 +3,17 @@
         <form @submit.prevent="register">
             <div class="grid gap-6">
                 <div class="grid gap-1">
-                    <Label class="mb-1" for="username">
-                        Username
+                    <Label class="mb-1" for="name">
+                        Name
                     </Label>
-                    <Input v-model="registerRequest.username" id="username" placeholder="Username" type="text"
+                    <Input v-model="registerRequest.name" id="name" placeholder="Name" type="text"
+                        :disabled="isLoading" />
+                </div>
+                <div class="grid gap-1">
+                    <Label class="mb-1" for="email">
+                        Email
+                    </Label>
+                    <Input v-model="registerRequest.email" id="email" placeholder="Email" type="email"
                         :disabled="isLoading" />
                 </div>
                 <div class="grid gap-1">
@@ -16,13 +23,11 @@
                     <Input v-model="registerRequest.password" id="password" placeholder="Password" type="password"
                         :disabled="isLoading" />
                 </div>
-                <div class="grid gap-1">
-                    <Label class="mb-1" for="password">
-                        Repeat Password
-                    </Label>
-                    <Input v-model="registerRequest.repeatPassword" id="password" placeholder="Repeat password"
-                        type="password" :disabled="isLoading" />
-                </div>
+
+                <span v-if="errorMessage" class="text-red-500 font-medium text-sm">
+                    Error: {{ errorMessage }}
+                </span>
+
                 <Button :disabled="isLoading">
                     Create account
                 </Button>
@@ -34,10 +39,12 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { RegisterRequest } from '@/types/RegisterRequest'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import API from '@/api/Client'
 
 // Injects
 const router = useRouter()
@@ -47,29 +54,41 @@ const route = useRoute()
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-const registerRequest = reactive({
-    username: '',
+const registerRequest: RegisterRequest = reactive({
+    name: '',
+    email: '',
     password: '',
-    repeatPassword: '',
 })
 
 // Methods
 const register = async () => {
-    if (!registerRequest.username || !registerRequest.password) {
+    if (!registerRequest.name || !registerRequest.email || !registerRequest.password) {
         errorMessage.value = "Please fill all fields"
         return
     }
 
-    if (registerRequest.password !== registerRequest.repeatPassword) {
-        errorMessage.value = "Passwords do not match"
-        return
-    }
+    isLoading.value = true
+
+    API.register(registerRequest)
+        .then(() => {
+            router.push({
+                path: (route.query.redirect as string) || '/dashboard',
+            })
+        })
+        .catch((errorResponse: { response: any }) => {
+            isLoading.value = false
+            const { response } = errorResponse
+
+            if (response.status === 401) {
+                errorMessage.value = 'Authentication failed'
+                return
+            }
+
+            errorMessage.value = 'Unkown error'
+            console.log(errorResponse)
+        })
 
     errorMessage.value = ''
-    console.log(registerRequest)
-    router.push({
-        path: (route.query.redirect as string) || '/dashboard',
-    })
     return
 }
 </script>

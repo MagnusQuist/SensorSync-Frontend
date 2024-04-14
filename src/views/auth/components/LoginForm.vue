@@ -3,10 +3,10 @@
         <form @submit.prevent="login">
             <div class="grid gap-6">
                 <div class="grid gap-1">
-                    <Label class="mb-1" for="username">
-                        Username
+                    <Label class="mb-1" for="email">
+                        Email
                     </Label>
-                    <Input v-model="loginRequest.username" id="username" placeholder="Username" type="text"
+                    <Input v-model="loginRequest.email" id="email" placeholder="Email" type="email"
                         :disabled="isLoading" />
                 </div>
                 <div class="grid gap-1">
@@ -16,6 +16,11 @@
                     <Input v-model="loginRequest.password" id="password" placeholder="Password" type="password"
                         :disabled="isLoading" />
                 </div>
+
+                <span v-if="errorMessage" class="text-red-500 font-medium text-sm">
+                    Error: {{ errorMessage }}
+                </span>
+
                 <Button :disabled="isLoading">
                     Sign in
                 </Button>
@@ -29,6 +34,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { LoginRequest } from '@/types/LoginRequest'
 import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import API from '@/api/Client'
@@ -41,13 +47,13 @@ const route = useRoute()
 const errorMessage = ref('')
 const isLoading = ref(false)
 
-const loginRequest = reactive({
-    username: '',
+const loginRequest: LoginRequest = reactive({
+    email: '',
     password: '',
 })
 
 const login = async () => {
-    if (!loginRequest.username || !loginRequest.password) {
+    if (!loginRequest.email || !loginRequest.password) {
         errorMessage.value = "Please fill all fields"
         return
     }
@@ -71,11 +77,7 @@ const login = async () => {
         })
 
     errorMessage.value = ''
-    console.log(loginRequest)
     isLoading.value = false
-    router.push({
-        path: (route.query.redirect as string) || '/dashboard',
-    })
     return
 }
 </script>
