@@ -70,7 +70,6 @@ import { Icon } from '@iconify/vue'
 import { DeviceType } from '@/types/DeviceType'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import API from '@/api/Client'
 import {
     Card,
     CardContent,
