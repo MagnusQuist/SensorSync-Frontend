@@ -38,6 +38,15 @@
                     </template>
                 </nav>
             </div>
+            <div :data-collapsed="isCollapsed" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
+                <nav
+                    class="cursor-pointer grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+                    <a @click="logout" :class="cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'justify-start')">
+                        <Icon :icon="'material-symbols:logout-rounded'" class="mr-2 size-5" />
+                        Logout
+                    </a>
+                </nav>
+            </div>
         </div>
     </TooltipProvider>
 </template>
@@ -53,6 +62,12 @@ import {
 } from '@/components/ui/tooltip'
 import TooltipProvider from '../ui/tooltip/TooltipProvider.vue'
 import { NavigationLink } from '@/types/NavigationLink'
+import API from '@/api/Client'
+import { useRoute, useRouter } from 'vue-router'
+
+// Injects
+const router = useRouter()
+const route = useRoute()
 
 interface Props {
     isCollapsed: boolean
@@ -60,6 +75,13 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const logout = () => {
+    API.logout()
+    router.push({
+        path: (route.query.redirect as string) || '/login',
+    })
+}
 
 </script>
 

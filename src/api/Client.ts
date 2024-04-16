@@ -54,6 +54,11 @@ export class API {
                 })
         })
     }
+
+    logout() {
+        localStorage.removeItem("token")
+
+    }
 }
 
 export default new API(import.meta.env.VITE_GATEWAY_URL)
