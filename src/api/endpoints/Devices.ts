@@ -8,6 +8,7 @@ export default class devices {
             axios
                 .get("http://localhost:8285/devices")
                 .then(async (response) => {
+                    console.log(response)
                     resolve(response.data)
                 })
                 .catch((error) => {
