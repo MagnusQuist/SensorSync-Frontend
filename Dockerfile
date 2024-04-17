@@ -1,9 +1,5 @@
 FROM node:latest as build-stage
 
-ENV PATH /usr/src/node_modules/.bin:$PATH
-ARG VITE_GATEWAY_URL
-ENV VITE_GATEWAY_URL=$VITE_GATEWAY_URL
-
 WORKDIR /usr/src/app
 
 COPY package*.json ./
