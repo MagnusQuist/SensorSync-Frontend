@@ -4,22 +4,18 @@ ENV PATH /usr/src/node_modules/.bin:$PATH
 ARG VITE_GATEWAY_URL
 ENV VITE_GATEWAY_URL=$VITE_GATEWAY_URL
 
+WORKDIR /usr/src/app
+
 COPY package*.json ./
 RUN npm install
-COPY ./ .
+COPY . ./
 RUN npm run build
 
 # Use official Nginx image as the base image
 FROM nginx:latest as production-stage
 
-# Remove default nginx configurations
-RUN rm -f /etc/nginx/conf.d/*
-
-# Copy custom nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-
-# Copy built Vue Vite application to Nginx web root directory
-COPY --from=build-stage /dist /usr/share/nginx/html
+COPY --from=build-stage usr/src/app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 8080
 EXPOSE 8080
