@@ -10,10 +10,9 @@ export class API {
         devices: devices
     }
 
-    baseURL = ''
+    baseURL = import.meta.env.VITE_GATEWAY_URL
 
-    constructor(url: string) {
-        this.baseURL = url
+    constructor() {
         this.initAPI()
     }
 
@@ -61,4 +60,4 @@ export class API {
     }
 }
 
-export default new API(import.meta.env.VITE_GATEWAY_URL)
+export default new API

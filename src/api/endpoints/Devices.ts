@@ -6,7 +6,7 @@ export default class devices {
     static async GetAllDevices(): Promise<RestResponse> {
         return new Promise<RestResponse>((resolve, reject) => {
             axios
-                .get(`${process.env.VUE_APP_API_BASE_URL}/devices`)
+                .get(`${process.env.VITE_GATEWAY_URL}/devices`)
                 .then(async (response) => {
                     console.log(response)
                     resolve(response.data)
