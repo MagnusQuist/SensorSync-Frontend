@@ -9,12 +9,20 @@ RUN npm install
 COPY ./ .
 RUN npm run build
 
-FROM nginx as production-stage
+# Use official Nginx image as the base image
+FROM nginx:latest as production-stage
 
-COPY nginx.conf /etc/nginx/nginx.conf
-## Remove default nginx index page
-RUN rm -rf /usr/share/nginx/html/*
+# Remove default nginx configurations
+RUN rm -f /etc/nginx/conf.d/*
+
+# Copy custom nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf
+
+# Copy built Vue Vite application to Nginx web root directory
 COPY --from=build-stage /dist /usr/share/nginx/html
 
+# Expose port 8080
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
