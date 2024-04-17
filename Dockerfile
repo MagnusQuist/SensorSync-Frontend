@@ -12,8 +12,9 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine as production-build
-COPY nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=builder /dist /usr/share/nginx/html
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
