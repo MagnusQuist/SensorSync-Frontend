@@ -1,6 +1,6 @@
 <template>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card class="rounded-sm shadow-sm">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle class="text-sm font-medium">
                     Total Devices
@@ -16,7 +16,7 @@
                 </p>
             </CardContent>
         </Card>
-        <Card>
+        <Card class="rounded-sm shadow-sm">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle class="text-sm font-medium">
                     Latest Athena Firmware
@@ -32,7 +32,7 @@
                 </p>
             </CardContent>
         </Card>
-        <Card>
+        <Card class="rounded-sm shadow-sm">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle class="text-sm font-medium">
                     Latest Toit Firmware
@@ -48,7 +48,7 @@
                 </p>
             </CardContent>
         </Card>
-        <Card>
+        <Card class="rounded-sm shadow-sm">
             <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle class="text-sm font-medium">
                     Device Groups

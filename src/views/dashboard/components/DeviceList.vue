@@ -1,5 +1,5 @@
 <template>
-    <Card>
+    <Card class="rounded-sm shadow-sm">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle class="text-xl font-semibold">
                 Device List
@@ -85,6 +85,15 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { buttonVariants } from '@/components/ui/button';
+import API from '@/api/Client'
+import { computed } from 'vue'
+
+const temp_devices = computed(
+    () => API.modules.devices.GetAllDevices()
+        .then((data: any) => console.log(data))
+)
+
+console.log(temp_devices)
 
 const devices: DeviceType[] = [
     {

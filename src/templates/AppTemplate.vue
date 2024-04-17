@@ -2,7 +2,7 @@
     <TheSidebar :is-collapsed="false" :links="links" />
     <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
         <div class="main-content flex flex-col flex-grow p-4">
-            <RouterView />
+            <RouterView :key="$route.fullPath" />
         </div>
     </main>
 </template>

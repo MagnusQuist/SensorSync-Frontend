@@ -27,7 +27,18 @@ export const routes: RouteRecordRaw[] = [
                     title: 'Devices',
                     showInMenu: true,
                     iconName: 'material-symbols-light:device-hub-rounded',
-                    variant: 'ghost'
+                    variant: 'ghost',
+                },
+            },
+            {
+                name: 'devices-add',
+                path: '/devices/add',
+                component: () => import('@/views/devices/AddDevice.vue'),
+                meta: {
+                    title: 'Add Device',
+                    showInMenu: true,
+                    iconName: 'material-symbols-light:note-stack-add-rounded',
+                    variant: 'ghost',
                 }
             },
             {

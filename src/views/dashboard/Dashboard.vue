@@ -6,7 +6,10 @@
                     Dashboard
                 </h2>
                 <div class="flex items-center space-x-2">
-                    <Button>Add Device</Button>
+                    <RouterLink :to="{ name: 'devices-add' }"
+                        :class="cn(buttonVariants({ variant: 'default', size: 'sm' }))">
+                        Add Device
+                    </RouterLink>
                 </div>
             </div>
             <InfoCards />
@@ -17,9 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import InfoCards from './components/InfoCards.vue'
 import DeviceList from './components/DeviceList.vue'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 
 </script>
 

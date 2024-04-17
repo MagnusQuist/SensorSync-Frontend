@@ -6,7 +6,7 @@ import devices from './endpoints/Devices'
 
 export class API {
     // All endpoints here
-    modules = {
+    modules: APIModule = {
         devices: devices
     }
 
@@ -18,6 +18,13 @@ export class API {
 
     initAPI() {
         axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token")
+        this.initModules()
+    }
+
+    initModules() {
+        for (const [moduleName, moduleClass] of Object.entries(this.modules)) {
+            this.modules[moduleName] = new moduleClass(this.baseURL)
+        }
     }
 
     async login(loginRequest: LoginRequest): Promise<RestResponse> {

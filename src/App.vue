@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row min-h-screen">
-    <RouterView />
+    <RouterView :key="$route.fullPath" />
   </div>
 </template>
 

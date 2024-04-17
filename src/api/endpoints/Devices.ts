@@ -2,13 +2,17 @@ import { RestResponse } from "@/types/RestResponse";
 import axios from "axios";
 
 export default class devices {
+    baseURL: string;
 
-    static async GetAllDevices(): Promise<RestResponse> {
+    constructor(baseURL: string) {
+        this.baseURL = baseURL
+    }
+
+    async GetAllDevices(): Promise<RestResponse> {
         return new Promise<RestResponse>((resolve, reject) => {
             axios
-                .get(`${process.env.VITE_GATEWAY_URL}/devices`)
+                .get(`${this.baseURL}/devices`)
                 .then(async (response) => {
-                    console.log(response)
                     resolve(response.data)
                 })
                 .catch((error) => {
