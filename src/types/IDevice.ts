@@ -1,8 +1,8 @@
-export interface DeviceType {
-    id: string
+export interface IDevice {
+    uuid: string
     name: string
     online: boolean
     athena_version: string
-    toit_version: string
+    toit_firmware_version: string
     group: string
 }

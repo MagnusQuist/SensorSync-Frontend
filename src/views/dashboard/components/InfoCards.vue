@@ -9,7 +9,7 @@
             </CardHeader>
             <CardContent>
                 <div class="text-2xl font-bold">
-                    2
+                    {{ devices.length }}
                 </div>
                 <p class="text-xs text-muted-foreground">
                     All up to date
@@ -25,7 +25,7 @@
             </CardHeader>
             <CardContent>
                 <div class="text-2xl font-bold">
-                    v1.0.2
+                    {{ athena_version }}
                 </div>
                 <p class="text-xs text-muted-foreground">
                     No updates available
@@ -41,7 +41,7 @@
             </CardHeader>
             <CardContent>
                 <div class="text-2xl font-bold">
-                    v2.2.0
+                    {{ toit_version }}
                 </div>
                 <p class="text-xs text-muted-foreground">
                     No updates available
@@ -57,11 +57,8 @@
             </CardHeader>
             <CardContent>
                 <div class="text-2xl font-bold">
-                    6
+                    {{ groups }}
                 </div>
-                <p class="text-xs text-muted-foreground">
-                    1 empty group
-                </p>
             </CardContent>
         </Card>
     </div>
@@ -75,6 +72,14 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import API from '@/api/Client'
+import { computed } from 'vue'
+
+const devices = computed(() => API.modules.devices.devices)
+const groups = computed(() => API.modules.devices.groups)
+const athena_version = computed(() => API.modules.devices.athena_version)
+const toit_version = computed(() => API.modules.devices.toit_version)
+
 </script>
 
 <style scoped></style>

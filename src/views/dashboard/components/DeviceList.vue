@@ -11,17 +11,17 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead class="w-[100px]">
+                                Status
+                            </TableHead>
                             <TableHead class="w-[300px]">
                                 Name
                             </TableHead>
                             <TableHead>
-                                Status
+                                ATHENA Firmware
                             </TableHead>
                             <TableHead>
-                                Group
-                            </TableHead>
-                            <TableHead>
-                                Firmware
+                                Toit Firmware
                             </TableHead>
                             <TableHead class="text-right">
                                 Actions
@@ -30,23 +30,25 @@
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="(device, index) in devices " :key="index">
+                            <TableCell>
+                                <span v-if="!device.online" class="flex h-3 w-3 rounded-full bg-green-400" />
+                                <span v-else class="flex h-3 w-3 rounded-full bg-red-500" />
+                            </TableCell>
                             <TableCell class="font-medium">
                                 {{ device.name }}
                             </TableCell>
                             <TableCell>
-                                {{ device.online }}
-                            </TableCell>
-                            <TableCell>
-                                {{ device.group }}
-                            </TableCell>
-                            <TableCell>
                                 {{ device.athena_version }}
+                            </TableCell>
+                            <TableCell>
+                                {{ device.toit_firmware_version }}
                             </TableCell>
                             <TableCell class="text-right space-x-2">
                                 <a href="#" :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
                                     <Icon icon="material-symbols-light:edit-square-outline-rounded" class="size-5" />
                                 </a>
-                                <a href="#" :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
+                                <a href="#" @click="openConfirmDeleteModal(device.uuid)"
+                                    :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
                                     <Icon icon="material-symbols-light:delete-outline-rounded" class="size-5" />
                                 </a>
                             </TableCell>
@@ -63,13 +65,40 @@
             </template>
         </CardContent>
     </Card>
+
+    <Dialog :open="showConfirmDeleteModal">
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Delete Device?</DialogTitle>
+                <DialogDescription>
+                    Are you sure you want to delete this device? If the device is still online, it will reappear in the
+                    list. Disconnect the device if your want to remove it completely.
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+                <DialogClose>
+                    <Button @click="closeDeleteModal" variant="secondary">Close</Button>
+                </DialogClose>
+                <Button @click="deleteDevice" variant="destructive">Delete</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>
 
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue'
-import { DeviceType } from '@/types/DeviceType'
+import { IDevice } from '@/types/IDevice'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 import {
     Card,
     CardContent,
@@ -86,25 +115,41 @@ import {
 } from '@/components/ui/table'
 import { buttonVariants } from '@/components/ui/button';
 import API from '@/api/Client'
-import { computed } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const temp_devices = computed(
-    () => API.modules.devices.GetAllDevices()
-        .then((data: any) => console.log(data))
-)
+const deviceToDelete = ref<string | null>(null)
 
-console.log(temp_devices)
+const showConfirmDeleteModal = ref(false)
 
-const devices: DeviceType[] = [
-    {
-        id: '28924167-788a-4f69-838f-822aa61eee10',
-        name: 'Temperature Sensor',
-        online: true,
-        athena_version: 'v0.10.0',
-        toit_version: 'v2.4.0',
-        group: 'Default'
+const devices = ref<IDevice[]>([])
+
+onMounted(() => {
+    getDevices()
+})
+
+const openConfirmDeleteModal = (guid: IDevice['uuid']) => {
+    console.log(guid)
+    deviceToDelete.value = guid
+    showConfirmDeleteModal.value = true
+}
+
+const getDevices = async () => {
+    devices.value = await API.modules.devices.GetAllDevices()
+}
+
+const closeDeleteModal = () => {
+    showConfirmDeleteModal.value = false
+}
+
+const deleteDevice = async () => {
+    if (!deviceToDelete.value) {
+        return
     }
-]
+    showConfirmDeleteModal.value = false
+    await API.modules.devices.DeleteDevice(deviceToDelete.value)
+    deviceToDelete.value = null
+}
+
 </script>
 
 <style scoped></style>

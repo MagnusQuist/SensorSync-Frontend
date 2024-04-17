@@ -9,7 +9,7 @@
             </div>
             <div :data-collapsed="isCollapsed" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
                 <nav
-                    class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+                    class="grid gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
                     <template v-for="(link, index) of links">
                         <Tooltip v-if="isCollapsed" :key="`1-${index}`" :delay-duration="0">
                             <TooltipTrigger as-child>
@@ -36,11 +36,7 @@
                             </span>
                         </RouterLink>
                     </template>
-                </nav>
-            </div>
-            <div :data-collapsed="isCollapsed" class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
-                <nav
-                    class="cursor-pointer grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+                    <Separator />
                     <a @click="logout" :class="cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'justify-start')">
                         <Icon :icon="'material-symbols:logout-rounded'" class="mr-2 size-5" />
                         Logout
@@ -55,6 +51,7 @@
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '../ui/button'
 import { Icon } from '@iconify/vue'
+import { Separator } from '@/components/ui/separator'
 import {
     Tooltip,
     TooltipContent,
