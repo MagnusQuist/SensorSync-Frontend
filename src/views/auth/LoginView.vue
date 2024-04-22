@@ -22,8 +22,6 @@
 
 <script setup lang="ts">
 import LoginForm from './components/LoginForm.vue'
-console.log(import.meta.env.VITE_GATEWAY_URL)
-console.log(import.meta.env)
 </script>
 
 <style scoped></style>

@@ -41,7 +41,7 @@
             </div>
 
             <Button :disabled="isSubmitDisabled">
-                Save Group
+                Save Device
             </Button>
         </div>
     </form>
@@ -77,10 +77,13 @@ const device = props.deviceUuid
 
 const groups = API.modules.groups.allGroups
 
-
 const isSubmitDisabled = computed(() => {
     return !device.name
 })
+
+const submitForm = async () => {
+    
+}
 </script>
 
 <style scoped></style>

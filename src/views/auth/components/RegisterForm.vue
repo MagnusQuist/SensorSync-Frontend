@@ -85,7 +85,6 @@ const register = async () => {
             }
 
             errorMessage.value = 'Unkown error'
-            console.log(errorResponse)
         })
 
     errorMessage.value = ''

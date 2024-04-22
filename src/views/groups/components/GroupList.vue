@@ -158,7 +158,6 @@ onMounted(() => {
 })
 
 const openConfirmDeleteModal = (guid: IGroup['uuid']) => {
-    console.log(guid)
     groupToDelete.value = guid
     showConfirmDeleteModal.value = true
 }

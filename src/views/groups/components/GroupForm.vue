@@ -47,6 +47,10 @@ const isSubmitDisabled = computed(() => {
         !group.name || !group.location
     )
 })
+
+const submitForm = async () => {
+
+}
 </script>
 
 <style scoped></style>

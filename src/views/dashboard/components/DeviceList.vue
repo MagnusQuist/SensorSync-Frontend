@@ -149,7 +149,7 @@ import {
 } from '@/components/ui/table'
 import { buttonVariants } from '@/components/ui/button';
 import API from '@/api/Client'
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { DateFormat } from '@/utility/DateFormat'
 import DeviceForm from './DeviceForm.vue'
 
@@ -162,7 +162,6 @@ const devices = API.modules.devices.devices
 const hasDevices = computed(() => devices.value != null && Object.keys(devices.value).length > 0)
 
 const openConfirmDeleteModal = (guid: IDevice['uuid']) => {
-    console.log(guid)
     deviceToDelete.value = guid
     showConfirmDeleteModal.value = true
 }
