@@ -80,6 +80,13 @@
                 </div>
 
                 <h4 class="text-xl font-semibold">Connect a Device</h4>
+                <Alert class="rounded-sm" variant="warning">
+                    <Icon icon="material-symbols-light:warning-outline-rounded" class="size-6" />
+                    <AlertTitle>Heads up!</AlertTitle>
+                    <AlertDescription>
+                        Make sure you've completed all the prerequisites before continuing.
+                    </AlertDescription>
+                </Alert>
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
                     <Card class="rounded-sm shadow-sm">
                         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -135,6 +142,7 @@
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
 import { Badge } from '@/components/ui/badge'
 import Code from '@/components/code/Code.vue'
 import {
@@ -143,6 +151,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 </script>
 
 <style scoped></style>

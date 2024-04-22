@@ -20,13 +20,13 @@ export const routes: RouteRecordRaw[] = [
                 }
             },
             {
-                name: 'devices',
-                path: '/devices',
-                component: () => import('@/views/dashboard/Dashboard.vue'),
+                name: 'groups',
+                path: '/groups',
+                component: () => import('@/views/groups/GroupsView.vue'),
                 meta: {
-                    title: 'Devices',
+                    title: 'Device Groups',
                     showInMenu: true,
-                    iconName: 'material-symbols-light:device-hub-rounded',
+                    iconName: 'material-symbols-light:all-inbox-rounded',
                     variant: 'ghost',
                 },
             },

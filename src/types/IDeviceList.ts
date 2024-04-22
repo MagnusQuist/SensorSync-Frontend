@@ -1,5 +1,5 @@
 import { IDevice } from "./IDevice"
 
 export interface IDeviceList {
-    devices: IDevice[]
+    devices: Record<IDevice['uuid'], IDevice>
 }

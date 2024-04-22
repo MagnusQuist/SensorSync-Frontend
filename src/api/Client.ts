@@ -3,11 +3,13 @@ import { RegisterRequest } from '@/types/RegisterRequest'
 import { RestResponse } from '@/types/RestResponse'
 import axios from 'axios'
 import devices from './endpoints/Devices'
+import groups from './endpoints/Groups'
 
 export class API {
     // All endpoints here
     modules: APIModule = {
-        devices: devices
+        devices: devices,
+        groups: groups
     }
 
     baseURL = import.meta.env.VITE_GATEWAY_URL
@@ -23,7 +25,7 @@ export class API {
 
     initModules() {
         for (const [moduleName, moduleClass] of Object.entries(this.modules)) {
-            this.modules[moduleName] = new moduleClass(this.baseURL)
+            this.modules[moduleName] = new moduleClass(this.baseURL, 10000)
         }
     }
 
@@ -35,7 +37,8 @@ export class API {
                     password: loginRequest.password,
                 })
                 .then(async (response) => {
-                    localStorage.setItem('token', response.data.token)
+                    localStorage.setItem('token', response.data.accessToken)
+                    localStorage.setItem('refreshToken', response.data.refreshToken)
                     resolve(response.data)
                 })
                 .catch((error) => {

@@ -5,4 +5,5 @@ export interface IDevice {
     athena_version: string
     toit_firmware_version: string
     group: string
+    last_ping: Date
 }

@@ -12,7 +12,6 @@
                     </RouterLink>
                 </div>
             </div>
-            <InfoCards />
             <DeviceList />
 
         </div>
@@ -20,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import InfoCards from './components/InfoCards.vue'
 import DeviceList from './components/DeviceList.vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'

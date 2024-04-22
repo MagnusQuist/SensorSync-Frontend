@@ -1,48 +1,54 @@
 import { RestResponse } from "@/types/RestResponse"
 import { IDevice } from "@/types/IDevice"
+import { WorkerBase } from './WorkerBase'
 import axios from "axios";
+import { ref } from "vue";
 
 export default class devices {
-    baseURL: string;
+    private worker: WorkerBase<Record<IDevice['uuid'], IDevice>> | null = null;
+    public devices = ref<Record<IDevice['uuid'], IDevice> | null>(null);
 
-    constructor(baseURL: string) {
-        this.baseURL = baseURL
-        this.invoke()
+    constructor(private readonly baseURL: string, private readonly interval: number) {
+        this.initModule()
     }
 
-    async invoke() {
-        await this.GetAllDevices()
+    initModule() {
+        this.getAllDevices().then(data => {
+            this.devices.value = data;
+            this.initWorker();
+        }).catch(error => {
+            console.error('Error initializing module:', error);
+        });
     }
 
-    devices: Record<IDevice['uuid'], IDevice> = {}
-    athena_version: string = 'v1.0.0'
-    toit_version: string = 'v2.3.0'
-    groups: Number = 0
+    initWorker() {
+        if (!this.worker) {
+            this.worker = new WorkerBase(async () => await this.getAllDevices(), this.interval)
+            this.worker?.start()
+            this.worker.onUpdate((data: any) => {
+                this.devices.value = data
+            })
+        }
+    }
 
-    async GetAllDevices(): Promise<RestResponse> {
-        return new Promise<RestResponse>((resolve, reject) => {
-            axios
-                .get(`${this.baseURL}/devices`)
-                .then(async (response) => {
-                    this.devices = response.data
-                    resolve(response.data)
-                })
-                .catch((error) => {
-                    reject(error)
-                })
-        })
+    async getAllDevices(): Promise<Record<IDevice['uuid'], IDevice>> {
+        const response = await axios.get(`${this.baseURL}/devices`)
+        return response.data.reduce((acc: Record<string, IDevice>, device: IDevice) => {
+            acc[device.uuid] = { ...device }
+            return acc
+        }, {})
     }
 
     async DeleteDevice(uuid: string): Promise<RestResponse> {
         return new Promise<RestResponse>((resolve, reject) => {
             axios.delete(`${this.baseURL}/devices/${uuid}`)
                 .then(async (response) => {
+                    delete this.devices.value![uuid];
                     resolve(response.data)
                 })
                 .catch((error) => {
                     reject(error)
                 })
         })
-
     }
 }
