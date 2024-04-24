@@ -1,6 +1,5 @@
 import { LoginRequest } from '@/types/LoginRequest'
 import { RegisterRequest } from '@/types/RegisterRequest'
-import { RestResponse } from '@/types/RestResponse'
 import axios from 'axios'
 import devices from './endpoints/Devices'
 import groups from './endpoints/Groups'
@@ -29,8 +28,8 @@ export class API {
         }
     }
 
-    async login(loginRequest: LoginRequest): Promise<RestResponse> {
-        return new Promise<RestResponse>((resolve, reject) => {
+    async login(loginRequest: LoginRequest): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
             axios
                 .post(`${this.baseURL}/auth/login`, {
                     email: loginRequest.email,
@@ -47,8 +46,8 @@ export class API {
         })
     }
 
-    async register(registerRequest: RegisterRequest): Promise<RestResponse> {
-        return new Promise<RestResponse>((resolve, reject) => {
+    async register(registerRequest: RegisterRequest): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
             axios
                 .post(`${this.baseURL}/auth/register`, {
                     name: registerRequest.name,

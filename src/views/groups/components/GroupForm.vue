@@ -15,7 +15,7 @@
             </div>
 
             <Button :disabled="isSubmitDisabled">
-                Save Group
+                {{ props.groupUuid ? 'Save Group' : 'Create Group' }}
             </Button>
         </div>
     </form>
@@ -26,8 +26,12 @@ import { IGroup } from '@/types/IGroup'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
 import API from '@/api/Client'
 import { computed, reactive } from 'vue'
+
+// Injects
+const notifyStore = useNotificationStore()
 
 // Props
 interface Props {
@@ -38,9 +42,8 @@ interface Props {
 const props = defineProps<Props>()
 
 const group = props.groupUuid
-    ? reactive({ ...API.modules.groups.allGroups[props.groupUuid] })
+    ? reactive({ ...API.modules.groups.groups.value[props.groupUuid] })
     : reactive({ name: '', location: '' } as IGroup)
-
 
 const isSubmitDisabled = computed(() => {
     return (
@@ -48,8 +51,35 @@ const isSubmitDisabled = computed(() => {
     )
 })
 
-const submitForm = async () => {
+const submitForm = () => {
+    if (props.groupUuid) {
+        updateGroup()
+    } else {
+        createGroup()
+    }
+}
 
+const updateGroup = async () => {
+    API.modules.groups.updateGroup(group)
+        .then((response: any) => {
+            notifyStore.notify("Group updated successfully!", NotificationType.Success)
+        }).catch((errorResponse: { reponse:any }) => {
+            console.log(errorResponse)
+            notifyStore.notify("Group update failed!", NotificationType.Error)
+            return
+        })
+}
+
+const createGroup = async () => {
+    API.modules.groups.createGroup(group)
+        .then((response: any) => {
+            notifyStore.notify("Group created successfully!", NotificationType.Success)
+            return
+        }).catch((errorResponse: { reponse:any }) => {
+            console.log(errorResponse)
+            notifyStore.notify("Group creation failed!", NotificationType.Error)
+            return
+        })
 }
 </script>
 

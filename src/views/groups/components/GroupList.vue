@@ -7,7 +7,7 @@
             <Icon icon="material-symbols-light:all-inbox-rounded" class="size-6" />
         </CardHeader>
         <CardContent>
-            <template v-if="groups.length">
+            <template v-if="hasGroups">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -16,9 +16,6 @@
                             </TableHead>
                             <TableHead>
                                 Location
-                            </TableHead>
-                            <TableHead>
-                                Number of Devices
                             </TableHead>
                         </TableRow>
                     </TableHeader>
@@ -29,9 +26,6 @@
                             </TableCell>
                             <TableCell>
                                 {{ group.location }}
-                            </TableCell>
-                            <TableCell>
-                                {{ group.device_count }}
                             </TableCell>
                             <TableCell class="text-right space-x-2">
                                 <Sheet>
@@ -64,7 +58,22 @@
                 <div class="flex flex-col items-center justify-center">
                     <h3 class="text-lg mb-1 font-medium text-slate-800">No Group</h3>
                     <p class="text-muted-foreground text-sm mb-4">Add a new group to view it in the list</p>
-                    <Button variant="outline">Add Group</Button>
+                    <Sheet>
+                        <SheetTrigger>
+                            <Button href="#" :class="cn(buttonVariants({ variant: 'default' }))">
+                                Add Group
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                                <SheetTitle>Edit Group</SheetTitle>
+                                <SheetDescription>
+                                    Make changes to the group.
+                                </SheetDescription>
+                            </SheetHeader>
+                            <GroupForm />
+                        </SheetContent>
+                    </Sheet>
                 </div>
             </template>
         </CardContent>
@@ -129,42 +138,20 @@ import {
 } from '@/components/ui/sheet'
 import { buttonVariants } from '@/components/ui/button';
 import API from '@/api/Client'
-import { onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const groupToDelete = ref<string | null>(null)
 
 const showConfirmDeleteModal = ref(false)
 
-const groups = ref<IGroup[]>([])
+const groups = API.modules.groups.groups
 
-onMounted(() => {
-    //  getGroups()
-    groups.value = [
-        {
-            uuid: "7035d89e-f64a-4cc3-9756-50dde12544f3",
-            name: "Default Group",
-            location: "None",
-            device_count: 1,
-            editable: false
-        },
-        {
-            uuid: "f704bd0f-88cf-4b47-b0c8-826420b1b89a",
-            name: "Security Devices",
-            location: "Main Building",
-            device_count: 3,
-            editable: true
-        }
-    ]
-})
+const hasGroups = computed(() => groups.value != null && Object.keys(groups.value).length > 0)
 
 const openConfirmDeleteModal = (guid: IGroup['uuid']) => {
     groupToDelete.value = guid
     showConfirmDeleteModal.value = true
 }
-
-//const getGroups = async () => {
-//    groups.value = await API.modules.groups.GetAllGroups()
-//}
 
 const closeDeleteModal = () => {
     showConfirmDeleteModal.value = false

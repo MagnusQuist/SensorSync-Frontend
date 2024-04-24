@@ -11,7 +11,7 @@
                 <Label class="mb-1" for="device_group">
                     Device Group
                 </Label>
-                <Select v-model="device.group">
+                <Select v-model="device.group_uuid">
                     <SelectTrigger>
                         <SelectValue placeholder="Select device group" />
                     </SelectTrigger>
@@ -61,28 +61,38 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import API from '@/api/Client'
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
 import { computed, reactive } from 'vue'
+
+// Injects
+const notifyStore = useNotificationStore()
 
 // Props
 interface Props {
-    deviceUuid?: IDevice['uuid']
+    deviceUuid: IDevice['uuid']
 }
 
 // Setup
 const props = defineProps<Props>()
 
-const device = props.deviceUuid
-    ? reactive({ ...API.modules.devices.devices[props.deviceUuid] })
-    : reactive({ name: '' } as IDevice)
+const device = reactive({ ...API.modules.devices.devices.value[props.deviceUuid] })
 
-const groups = API.modules.groups.allGroups
+const groups = API.modules.groups.groups
 
 const isSubmitDisabled = computed(() => {
     return !device.name
 })
 
 const submitForm = async () => {
-    
+    await API.modules.devices.updateDevice(device)
+        .then((response: any) => {
+            notifyStore.notify("Device updated successfully!", NotificationType.Success)
+            return
+        }).catch((error: any) => {
+            console.log(error)
+            notifyStore.notify("Device not updated!", NotificationType.Error)
+            return
+        }) 
 }
 </script>
 

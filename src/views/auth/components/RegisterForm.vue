@@ -25,7 +25,7 @@
                 </div>
 
                 <span v-if="errorMessage" class="text-red-500 font-medium text-sm">
-                    Error: {{ errorMessage }}
+                    {{ errorMessage }}
                 </span>
 
                 <Button :disabled="isLoading">
@@ -45,10 +45,14 @@ import { Input } from '@/components/ui/input'
 import { reactive, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import API from '@/api/Client'
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
 
 // Injects
 const router = useRouter()
 const route = useRoute()
+
+// Store
+const notifyStore = useNotificationStore()
 
 // Data
 const errorMessage = ref('')
@@ -70,12 +74,20 @@ const register = async () => {
     isLoading.value = true
 
     API.register(registerRequest)
-        .then(() => {
-            router.push({
-                path: (route.query.redirect as string) || '/dashboard',
-            })
+        .then((response) => {
+            if (response.errorMessage) {
+                notifyStore.notify("Registration failed!", NotificationType.Error)
+                errorMessage.value = "Registration failed"
+                return
+            } else {
+                notifyStore.notify("Account created successfully!", NotificationType.Success)
+                router.push({
+                    path: (route.query.redirect as string) || '/login',
+                })
+            }
         })
         .catch((errorResponse: { response: any }) => {
+            notifyStore.notify("Uknown API error!", NotificationType.Error)
             isLoading.value = false
             const { response } = errorResponse
 

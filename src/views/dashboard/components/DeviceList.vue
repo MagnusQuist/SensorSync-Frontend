@@ -44,7 +44,7 @@
                                 {{ device.name }}
                             </TableCell>
                             <TableCell>
-                                {{ device.group ? device.group : 'No group set' }}
+                                {{ device.group_uuid ? device.group_uuid : 'No group set' }}
                             </TableCell>
                             <TableCell>
                                 {{ device.athena_version }}
@@ -158,6 +158,8 @@ const deviceToDelete = ref<string | null>(null)
 const showConfirmDeleteModal = ref(false)
 
 const devices = API.modules.devices.devices
+
+const groups = API.modules.groups.groups
 
 const hasDevices = computed(() => devices.value != null && Object.keys(devices.value).length > 0)
 

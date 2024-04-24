@@ -4,6 +4,6 @@ export interface IDevice {
     online: boolean
     athena_version: string
     toit_firmware_version: string
-    group: string
+    group_uuid: string
     last_ping: Date
 }

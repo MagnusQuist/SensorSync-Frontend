@@ -59,10 +59,15 @@ const login = async () => {
     }
     isLoading.value = true
     API.login(loginRequest)
-        .then(() => {
-            router.push({
-                path: (route.query.redirect as string) || '/dashboard',
-            })
+        .then((response) => {
+            if (response.errorMessage) {
+                errorMessage.value = response.errorMessage
+                return
+            } else {
+                router.push({
+                    path: (route.query.redirect as string) || '/dashboard',
+                })
+            }
         })
         .catch((errorResponse: { response: any; }) => {
             isLoading.value = false
