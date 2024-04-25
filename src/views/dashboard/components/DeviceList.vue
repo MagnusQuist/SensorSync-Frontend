@@ -44,7 +44,7 @@
                                 {{ device.name }}
                             </TableCell>
                             <TableCell>
-                                {{ device.group_uuid ? device.group_uuid : 'No group set' }}
+                                {{ deviceGroupName(device) }}
                             </TableCell>
                             <TableCell>
                                 {{ device.athena_version }}
@@ -162,6 +162,10 @@ const devices = API.modules.devices.devices
 const groups = API.modules.groups.groups
 
 const hasDevices = computed(() => devices.value != null && Object.keys(devices.value).length > 0)
+
+const deviceGroupName = (device: IDevice) => {
+    return device.group_uuid ? groups.value?.[device.group_uuid]?.name || '' : 'Unassigned';
+}
 
 const openConfirmDeleteModal = (guid: IDevice['uuid']) => {
     deviceToDelete.value = guid

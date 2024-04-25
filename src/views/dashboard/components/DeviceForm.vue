@@ -23,7 +23,6 @@
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <!--<Input v-model="device.group" id="device_group" placeholder="Device Group" type="text" />-->
             </div>
             <div class="grid gap-1">
                 <Label class="mb-1" for="athena_version">
@@ -67,6 +66,9 @@ import { computed, reactive } from 'vue'
 // Injects
 const notifyStore = useNotificationStore()
 
+// Emits
+const emit = defineEmits(['onUpdate:open'])
+
 // Props
 interface Props {
     deviceUuid: IDevice['uuid']
@@ -85,7 +87,8 @@ const isSubmitDisabled = computed(() => {
 
 const submitForm = async () => {
     await API.modules.devices.updateDevice(device)
-        .then((response: any) => {
+        .then(() => {
+            emit('onUpdate:open')
             notifyStore.notify("Device updated successfully!", NotificationType.Success)
             return
         }).catch((error: any) => {

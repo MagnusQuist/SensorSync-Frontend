@@ -61,7 +61,7 @@ const submitForm = () => {
 
 const updateGroup = async () => {
     API.modules.groups.updateGroup(group)
-        .then((response: any) => {
+        .then(() => {
             notifyStore.notify("Group updated successfully!", NotificationType.Success)
         }).catch((errorResponse: { reponse:any }) => {
             console.log(errorResponse)
@@ -72,7 +72,7 @@ const updateGroup = async () => {
 
 const createGroup = async () => {
     API.modules.groups.createGroup(group)
-        .then((response: any) => {
+        .then(() => {
             notifyStore.notify("Group created successfully!", NotificationType.Success)
             return
         }).catch((errorResponse: { reponse:any }) => {

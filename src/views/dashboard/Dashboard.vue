@@ -12,6 +12,26 @@
                     </RouterLink>
                 </div>
             </div>
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <DashboardCard 
+                    :title="'Connected Devices'"
+                    :data="devicesLength"
+                />
+                <DashboardCard 
+                    :title="'Device Groups'"
+                    :data="groupsLength"
+                />
+                <DashboardCard 
+                    :title="'ATHENA Version'"
+                    :data="groupsLength"
+                    :subtitle="'Latest release'"
+                />
+                <DashboardCard 
+                    :title="'Toit Version'"
+                    :data="groupsLength"
+                    :subtitle="'Latest release'"
+                />
+            </div>
             <DeviceList />
 
         </div>
@@ -20,9 +40,13 @@
 
 <script setup lang="ts">
 import DeviceList from './components/DeviceList.vue'
+import DashboardCard from './components/DashboardCard.vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import API from '@/api/Client'
 
+const devicesLength = Object.keys(API.modules.devices.devices.value).length
+const groupsLength = Object.keys(API.modules.groups.groups.value).length
 </script>
 
 <style scoped></style>
