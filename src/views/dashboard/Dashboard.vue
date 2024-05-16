@@ -23,12 +23,12 @@
                 />
                 <DashboardCard 
                     :title="'ATHENA Version'"
-                    :data="groupsLength"
+                    :data="athenaVersion"
                     :subtitle="'Latest release'"
                 />
                 <DashboardCard 
                     :title="'Toit Version'"
-                    :data="groupsLength"
+                    :data="toitVersion"
                     :subtitle="'Latest release'"
                 />
             </div>
@@ -44,9 +44,36 @@ import DashboardCard from './components/DashboardCard.vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import API from '@/api/Client'
+import { onMounted, ref } from 'vue'
+
+const athenaVersion = ref('')
+const toitVersion = ref('')
 
 const devicesLength = Object.keys(API.modules.devices.devices.value).length
 const groupsLength = Object.keys(API.modules.groups.groups.value).length
+
+onMounted(() => {
+    fetchVersions()
+})
+
+const getAthenaVersion = async () => {
+    const response = await API.modules.firmware.getAthenaVersion()
+    return response
+}
+
+const getToitVersion = async () => {
+    const response = await API.modules.firmware.getToitVersion()
+    return response
+}
+
+const fetchVersions = async () => {
+    try {
+        athenaVersion.value = await getAthenaVersion()
+        toitVersion.value = await getToitVersion()
+    } catch(error) {
+        console.error('Error fecthing firmware versions: ', error)
+    }
+}
 </script>
 
 <style scoped></style>

@@ -34,7 +34,8 @@ export default class devices {
 
     async getAllDevices(): Promise<Record<IDevice['uuid'], IDevice>> {
         const response = await axios.get(`${this.baseURL}/devices`)
-        return response.data.reduce((acc: Record<string, IDevice>, device: IDevice) => {
+        const sortedDevices = response.data.sort((a: IDevice, b: IDevice) => a.uuid.localeCompare(b.uuid))
+        return sortedDevices.reduce((acc: Record<string, IDevice>, device: IDevice) => {
             acc[device.uuid] = { ...device }
             return acc
         }, {})
@@ -46,10 +47,26 @@ export default class devices {
     }
 
     async updateDevice(device: IDevice): Promise<Record<IDevice['uuid'], IDevice>> {
-        console.log(device)
-        const response = await axios.put(`${this.baseURL}/devices/${device.uuid}`, device)
-        console.log(response.data)
-        return response.data
+        try {
+            const response = await axios.put(`${this.baseURL}/devices/${device.uuid}`, device)
+            const updatedDevice = response.data
+
+            if (this.devices.value) {
+                this.devices.value = {
+                    ...this.devices.value,
+                    [updatedDevice.uuid]: updatedDevice
+                }
+            } else {
+                this.devices.value = { [updatedDevice.uuid]: updatedDevice }
+            }
+
+            return updatedDevice
+
+        } catch (error: any) {
+            console.log('Could not update device: ' + error)
+        }
+
+        return this.devices.value as Record<IDevice['uuid'], IDevice>;
     }
 
     async DeleteDevice(uuid: string): Promise<RestResponse> {

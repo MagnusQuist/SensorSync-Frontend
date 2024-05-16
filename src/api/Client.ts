@@ -3,12 +3,14 @@ import { RegisterRequest } from '@/types/RegisterRequest'
 import axios from 'axios'
 import devices from './endpoints/Devices'
 import groups from './endpoints/Groups'
+import firmware from './endpoints/Firmware'
 
 export class API {
     // All endpoints here
     modules: APIModule = {
         devices: devices,
-        groups: groups
+        groups: groups,
+        firmware: firmware
     }
 
     baseURL = import.meta.env.VITE_GATEWAY_URL
@@ -24,7 +26,7 @@ export class API {
 
     initModules() {
         for (const [moduleName, moduleClass] of Object.entries(this.modules)) {
-            this.modules[moduleName] = new moduleClass(this.baseURL, 10000)
+            this.modules[moduleName] = new moduleClass(this.baseURL, 1000)
         }
     }
 
