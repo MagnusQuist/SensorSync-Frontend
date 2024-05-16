@@ -3,6 +3,7 @@ import axios from "axios"
 export default class Firmware {
     constructor(private readonly baseURL: string, private readonly interval: number) {
         this.initModule()
+        console.log(this.interval)
     }
 
     initModule() {
