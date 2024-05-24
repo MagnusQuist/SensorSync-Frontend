@@ -44,7 +44,7 @@ export const routes: RouteRecordRaw[] = [
             {
                 name: 'firmware',
                 path: '/firmware',
-                component: () => import('@/views/dashboard/Dashboard.vue'),
+                component: () => import('@/views/firmware/Firmware.vue'),
                 meta: {
                     title: 'Firmware',
                     showInMenu: true,

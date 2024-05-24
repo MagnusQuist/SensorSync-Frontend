@@ -1,13 +1,26 @@
 import axios from "axios"
+import { ref } from "vue"
 
 export default class Firmware {
+    public toitVersion = ref<string | null>(null)
+    public athenaVersion = ref<string | null>(null)
+
     constructor(private readonly baseURL: string, private readonly interval: number) {
         this.initModule()
         console.log(this.interval)
     }
 
     initModule() {
-        // No initiation needed for this module
+        this.getToitVersion().then(data => {
+            this.toitVersion.value = data
+        }).catch(error => {
+            console.error('Limit may be exceeded... ', error)
+        })
+        this.getAthenaVersion().then(data => {
+            this.athenaVersion.value = data
+        }).catch(error => {
+            console.error('Limit may be exceeded... ', error)
+        })
     }
 
     async getAthenaVersion(): Promise<string> {

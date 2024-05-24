@@ -56,20 +56,18 @@ onMounted(() => {
     fetchVersions()
 })
 
-const getAthenaVersion = async () => {
-    const response = await API.modules.firmware.getAthenaVersion()
-    return response
+const getAthenaVersion = () => {
+    return API.modules.firmware.athenaVersion
 }
 
-const getToitVersion = async () => {
-    const response = await API.modules.firmware.getToitVersion()
-    return response
+const getToitVersion = () => {
+    return API.modules.firmware.toitVersion
 }
 
-const fetchVersions = async () => {
+const fetchVersions = () => {
     try {
-        athenaVersion.value = await getAthenaVersion()
-        toitVersion.value = await getToitVersion()
+        athenaVersion.value = getAthenaVersion()
+        toitVersion.value = getToitVersion()
     } catch(error) {
         console.error('Error fecthing firmware versions: ', error)
     }
