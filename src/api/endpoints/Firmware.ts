@@ -2,7 +2,6 @@ import { FirmwareRequest } from "@/types/FirmwareRequest"
 import { IDevice } from "@/types/IDevice"
 import axios from "axios"
 import { ref } from "vue"
-import { WorkerBase } from "./WorkerBase"
 
 export default class Firmware {
     public toitVersion = ref<string | null>(null)
