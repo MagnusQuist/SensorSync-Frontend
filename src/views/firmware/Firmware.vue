@@ -144,6 +144,7 @@ import { Input } from '@/components/ui/input'
 import API from '@/api/Client'
 import { ref } from 'vue';
 import { FirmwareRequest } from '@/types/FirmwareRequest'
+import { IDevice } from '@/types/IDevice'
 
 const deviceToUpdate = ref('')
 
@@ -173,23 +174,37 @@ const firmwareRequest: FirmwareRequest = {
 
 const startUpgrade = async () => {
     upgradeStarted.value = true
+
     API.modules.firmware.startFirmwareUpgrade(firmwareRequest, deviceToUpdate.value)
         .then((response: any) => {
             if (response.errorMessage) {
                 console.log(response)
                 return
             } else {
-                const upgradeInterval = setInterval(async () => {
-                    //const res: number = await API.modules.firmware.getFirmwareUpgradeProgress(deviceToUpdate.value)
-                    
-                    if (upgradeProgress.value < 100) {
-                        upgradeProgress.value += 4
-                    } else {
-                        upgradeProgress.value = 100
-                        clearInterval(upgradeInterval)
-                        upgradeFinished.value = true
-                    }
-                }, 200)
+                // Websocket connection to ESP for progress display
+                const device: IDevice | undefined = devices.value
+                ? (Object.values(devices.value) as IDevice[]).find(device => device.uuid === deviceToUpdate.value)
+                : undefined
+
+                const ws_endpoint = `ws://${device?.ip_address}:${device?.jaguar_port}/ws`
+                const connection = new WebSocket(ws_endpoint)
+
+                connection.onopen = (event: any) => {
+                    console.log("Connection to ESP opened")
+                    console.log(event)
+                }
+
+                connection.onmessage = (event: any) => {
+                    console.log(event)
+                    // Update progress with event message
+                    upgradeProgress.value = event.message
+                }
+
+                connection.onclose = (event: any) => {
+                    console.log(event)
+                    upgradeFinished.value = true
+                    finishUpgrade()
+                }
             }
         })
         .catch((errorResponse: { response:any }) => {
