@@ -186,7 +186,7 @@ const startUpgrade = async () => {
                 ? (Object.values(devices.value) as IDevice[]).find(device => device.uuid === deviceToUpdate.value)
                 : undefined
 
-                const ws_endpoint = `ws://${device?.ip_address}:${device?.jaguar_port}/ws`
+                const ws_endpoint = `ws://${device?.ip_address}:1337/ws`
                 const connection = new WebSocket(ws_endpoint)
 
                 connection.onopen = (event: any) => {
@@ -197,13 +197,12 @@ const startUpgrade = async () => {
                 connection.onmessage = (event: any) => {
                     console.log(event)
                     // Update progress with event message
-                    upgradeProgress.value = event.message
+                    upgradeProgress.value = Number(event.data)
                 }
 
                 connection.onclose = (event: any) => {
                     console.log(event)
                     upgradeFinished.value = true
-                    finishUpgrade()
                 }
             }
         })
