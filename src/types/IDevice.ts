@@ -6,4 +6,6 @@ export interface IDevice {
     toit_firmware_version: string
     group_uuid: string
     last_ping: Date
+    ip_address: string
+    jaguar_port: number
 }

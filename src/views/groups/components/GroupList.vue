@@ -139,6 +139,10 @@ import {
 import { buttonVariants } from '@/components/ui/button';
 import API from '@/api/Client'
 import { computed, ref } from 'vue'
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
+
+// Injects
+const notifyStore = useNotificationStore()
 
 const groupToDelete = ref<string | null>(null)
 
@@ -163,6 +167,7 @@ const deleteGroup = async () => {
     }
     showConfirmDeleteModal.value = false
     await API.modules.groups.DeleteGroup(groupToDelete.value)
+    notifyStore.notify("Group Deleted", "The group has been removed.", NotificationType.Success)
     groupToDelete.value = null
 }
 

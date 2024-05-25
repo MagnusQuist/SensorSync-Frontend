@@ -18,6 +18,9 @@
                                 Name
                             </TableHead>
                             <TableHead>
+                                Device IP
+                            </TableHead>
+                            <TableHead>
                                 Device Group
                             </TableHead>
                             <TableHead>
@@ -44,6 +47,9 @@
                                 {{ device.name }}
                             </TableCell>
                             <TableCell>
+                                {{ device.ip_address }}
+                            </TableCell>
+                            <TableCell>
                                 {{ deviceGroupName(device) }}
                             </TableCell>
                             <TableCell>
@@ -56,6 +62,10 @@
                                 {{ DateFormat(device.last_ping) }}
                             </TableCell>
                             <TableCell class="text-right space-x-2">
+                                <a :href="'//' + device.ip_address + ':' + device.jaguar_port" target="_blank" :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
+                                    <Icon icon="material-symbols-light:open-in-new-rounded" class="size-5" />
+                                </a>
+
                                 <Sheet>
                                     <SheetTrigger>
                                         <a href="#" :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
@@ -73,6 +83,7 @@
                                         <DeviceForm :deviceUuid="device.uuid" />
                                     </SheetContent>
                                 </Sheet>
+
                                 <a href="#" @click="openConfirmDeleteModal(device.uuid)"
                                     :class="cn(buttonVariants({ variant: 'outline', size: 'sm' }))">
                                     <Icon icon="material-symbols-light:delete-outline-rounded" class="size-5" />
@@ -152,6 +163,10 @@ import API from '@/api/Client'
 import { computed, ref } from 'vue'
 import { DateFormat } from '@/utility/DateFormat'
 import DeviceForm from './DeviceForm.vue'
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
+
+// Injects
+const notifyStore = useNotificationStore()
 
 const deviceToDelete = ref<string | null>(null)
 
@@ -182,6 +197,7 @@ const deleteDevice = async () => {
     }
     showConfirmDeleteModal.value = false
     await API.modules.devices.DeleteDevice(deviceToDelete.value)
+    notifyStore.notify("Device Deleted", "The device has been removed.", NotificationType.Success)
     deviceToDelete.value = null
 }
 

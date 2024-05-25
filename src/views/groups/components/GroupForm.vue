@@ -62,10 +62,10 @@ const submitForm = () => {
 const updateGroup = async () => {
     API.modules.groups.updateGroup(group)
         .then(() => {
-            notifyStore.notify("Group updated successfully!", NotificationType.Success)
+            notifyStore.notify("Update Successfull", "Group updated successfully!", NotificationType.Success)
         }).catch((errorResponse: { reponse:any }) => {
             console.log(errorResponse)
-            notifyStore.notify("Group update failed!", NotificationType.Error)
+            notifyStore.notify("Update Failed", "Group update failed!", NotificationType.Error)
             return
         })
 }
@@ -73,11 +73,11 @@ const updateGroup = async () => {
 const createGroup = async () => {
     API.modules.groups.createGroup(group)
         .then(() => {
-            notifyStore.notify("Group created successfully!", NotificationType.Success)
+            notifyStore.notify("Create Successfull", "Group created successfully!", NotificationType.Success)
             return
         }).catch((errorResponse: { reponse:any }) => {
             console.log(errorResponse)
-            notifyStore.notify("Group creation failed!", NotificationType.Error)
+            notifyStore.notify("Create Failed", "Group creation failed!", NotificationType.Error)
             return
         })
 }

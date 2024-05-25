@@ -44,13 +44,20 @@ import DashboardCard from './components/DashboardCard.vue'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import API from '@/api/Client'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const athenaVersion = ref('')
 const toitVersion = ref('')
 
-const devicesLength = Object.keys(API.modules.devices.devices.value).length
-const groupsLength = Object.keys(API.modules.groups.groups.value).length
+const devicesLength = computed(() => {
+    const devices = API.modules.devices.devices.value;
+    return devices ? Object.keys(devices).length : 0;
+});
+
+const groupsLength = computed(() => {
+    const groups = API.modules.groups.groups.value;
+    return groups ? Object.keys(groups).length : 0;
+});
 
 onMounted(() => {
     fetchVersions()

@@ -76,18 +76,18 @@ const register = async () => {
     API.register(registerRequest)
         .then((response) => {
             if (response.errorMessage) {
-                notifyStore.notify("Registration failed!", NotificationType.Error)
+                notifyStore.notify("Registration Failed", "User registration failed!", NotificationType.Error)
                 errorMessage.value = "Registration failed"
                 return
             } else {
-                notifyStore.notify("Account created successfully!", NotificationType.Success)
+                notifyStore.notify("Create Successfull", "Account created successfully!", NotificationType.Success)
                 router.push({
                     path: (route.query.redirect as string) || '/login',
                 })
             }
         })
         .catch((errorResponse: { response: any }) => {
-            notifyStore.notify("Uknown API error!", NotificationType.Error)
+            notifyStore.notify("Error", "Uknown API error!", NotificationType.Error)
             isLoading.value = false
             const { response } = errorResponse
 

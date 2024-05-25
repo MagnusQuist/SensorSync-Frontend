@@ -4,6 +4,10 @@ import { SetGroupRequest } from "@/types/SetGroupRequest"
 import { WorkerBase } from './WorkerBase'
 import axios from "axios";
 import { ref } from "vue";
+import { NotificationType, useNotificationStore } from '@/stores/notification.store'
+
+// Injects
+const notifyStore = useNotificationStore()
 
 export default class devices {
     private worker: WorkerBase<Record<IDevice['uuid'], IDevice>> | null = null
@@ -27,8 +31,22 @@ export default class devices {
             this.worker = new WorkerBase(async () => await this.getAllDevices(), this.interval)
             this.worker?.start()
             this.worker.onUpdate((data: any) => {
+                if (data !== null) {
+                    this.checkNewData(data, this.devices.value!)
+                }
                 this.devices.value = data
             })
+        }
+    }
+
+    checkNewData(newData: any, currentData: Record<IDevice['uuid'], IDevice>) {
+        const newUUIDs = new Set(Object.keys(newData))
+        const currentUUIDs = new Set(Object.keys(currentData))
+
+        const diff = [...newUUIDs].filter(uuid => !currentUUIDs.has(uuid))
+
+        if (diff.length) {
+            notifyStore.notify("New Device", "A new device has been added", NotificationType.Success)
         }
     }
 

@@ -89,11 +89,11 @@ const submitForm = async () => {
     await API.modules.devices.updateDevice(device)
         .then(() => {
             emit('onUpdate:open')
-            notifyStore.notify("Device updated successfully!", NotificationType.Success)
+            notifyStore.notify("Update Successfull", "Device updated successfully!", NotificationType.Success)
             return
         }).catch((error: any) => {
             console.log(error)
-            notifyStore.notify("Device not updated!", NotificationType.Error)
+            notifyStore.notify("Update Failed", "Device not updated!", NotificationType.Error)
             return
         }) 
 }

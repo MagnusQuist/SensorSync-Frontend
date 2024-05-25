@@ -1,5 +1,8 @@
+import { FirmwareRequest } from "@/types/FirmwareRequest"
+import { IDevice } from "@/types/IDevice"
 import axios from "axios"
 import { ref } from "vue"
+import { WorkerBase } from "./WorkerBase"
 
 export default class Firmware {
     public toitVersion = ref<string | null>(null)
@@ -31,5 +34,33 @@ export default class Firmware {
     async getToitVersion(): Promise<string> {
         const response = await axios.get(`${this.baseURL}/firmware/toit/latest`)
         return response.data
+    }
+
+    async startFirmwareUpgrade(firmwareRequest: FirmwareRequest, device: IDevice['uuid']): Promise<any> {
+        console.log(device)
+
+        return new Promise<any>((resolve, reject) => {
+            axios.post(`${this.baseURL}/firmware/update/${device}`, {
+                token: firmwareRequest.token
+            })
+                .then(async (response) => {
+                    resolve(response.data)
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+
+    async getFirmwareUpgradeProgress(device: IDevice['uuid']): Promise<number> {
+        return new Promise<number>((resolve, reject) => {
+            axios.get(`${this.baseURL}/firmware/update/${device}/progress`)
+                .then(async (response) => {
+                    resolve(response.data)
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
     }
 }

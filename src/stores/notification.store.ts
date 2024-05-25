@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 
 export interface Notification {
-    message: string;
-    type: NotificationType;
-    notifyTime: number;
+    message: string
+    title: string
+    type: NotificationType
+    notifyTime: number
 }
 
 export enum NotificationType {
@@ -24,11 +25,11 @@ export const useNotificationStore = defineStore('notify', {
         }
     },
     actions: {
-        notify(messageOrError: unknown, type: NotificationType) {
+        notify(title: string, messageOrError: unknown, type: NotificationType) {
             let message: string = ""
             if (messageOrError instanceof Error) message = messageOrError.message
             if (typeof messageOrError === "string") message = messageOrError
-            const notification: Notification = { message, type, notifyTime: Date.now() }
+            const notification: Notification = { title, message, type, notifyTime: Date.now() }
             this.notifications.push(notification)
             setTimeout(this.removeNotification.bind(this), 6000, notification)
         },
