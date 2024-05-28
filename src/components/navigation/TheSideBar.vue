@@ -1,6 +1,6 @@
 <template>
     <TooltipProvider :delay-duration="0">
-        <div class="min-w-[220px] border-r-slate-100 border-r">
+        <div class="min-w-[200px] border-r-slate-100 border-r">
             <div class="border-b-slate-100 border-b py-4 px-2">
                 <h1 class="text-xl font-semibold tracking-tight">
                     Sensor Sync

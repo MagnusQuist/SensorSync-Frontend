@@ -14,7 +14,7 @@
                             <TableHead class="w-[100px]">
                                 Status
                             </TableHead>
-                            <TableHead class="w-[300px]">
+                            <TableHead class="w-[260px]">
                                 Name
                             </TableHead>
                             <TableHead>
@@ -24,10 +24,10 @@
                                 Device Group
                             </TableHead>
                             <TableHead>
-                                ATHENA Firmware
+                                ATHENA
                             </TableHead>
                             <TableHead>
-                                Toit Firmware
+                                Toit
                             </TableHead>
                             <TableHead>
                                 Last Ping
