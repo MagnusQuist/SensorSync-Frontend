@@ -1,5 +1,6 @@
 export interface FirmwareRequest {
-    wifi_password: string | number | undefined;
-    wifi_ssid: string | number | undefined;
+    wifi_password: string | undefined
+    wifi_ssid: string | undefined
+    host_ip: string | undefined
     token: string
 }

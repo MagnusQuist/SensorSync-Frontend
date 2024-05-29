@@ -42,7 +42,8 @@ export default class Firmware {
             axios.post(`${this.baseURL}/firmware/update/${device}`, {
                 token: firmwareRequest.token,
                 wifi_ssid: firmwareRequest.wifi_ssid,
-                wifi_password: firmwareRequest.wifi_password
+                wifi_password: firmwareRequest.wifi_password,
+                host_ip: firmwareRequest.host_ip
             })
                 .then(async (response) => {
                     resolve(response.data)

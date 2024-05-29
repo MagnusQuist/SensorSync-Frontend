@@ -40,6 +40,13 @@
                         </div>
 
                         <div class="grid gap-1">
+                            <Label class="mb-1" for="host-ip">
+                                Host IP Address
+                            </Label>
+                            <Input v-model="firmwareRequest.host_ip" id="host-ip" placeholder="192.168.0.1" type="text" />
+                        </div>
+
+                        <div class="grid gap-1">
                             <Label class="mb-1" for="wifi-ssid">
                                 Wifi SSID
                             </Label>
@@ -192,7 +199,8 @@ const isSubmitDisabled = computed(() => {
 const firmwareRequest: FirmwareRequest = reactive({
     token: localStorage.getItem('token') || '',
     wifi_ssid: '',
-    wifi_password: ''
+    wifi_password: '',
+    host_ip: ''
 })
 
 const startUpgrade = async () => {
