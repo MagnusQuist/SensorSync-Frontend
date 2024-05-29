@@ -39,7 +39,20 @@
                                 placeholder="Toit Firmware Version" type="text" disabled />
                         </div>
 
-                        <Button :disabled="deviceToUpdate == ''">
+                        <div class="grid gap-1">
+                            <Label class="mb-1" for="wifi-ssid">
+                                Wifi SSID
+                            </Label>
+                            <Input v-model="firmwareRequest.wifi_ssid" id="wifi-ssid" placeholder="Network name" type="text" />
+                        </div>
+                        <div class="grid gap-1">
+                            <Label class="mb-1" for="password">
+                                Wifi Password
+                            </Label>
+                            <Input v-model="firmwareRequest.wifi_password" id="wifi_password" placeholder="Network password" type="password" />
+                        </div>
+
+                        <Button :disabled="isSubmitDisabled">
                             Start Upgrade
                         </Button>
                     </div>
@@ -142,7 +155,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import API from '@/api/Client'
-import { ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { FirmwareRequest } from '@/types/FirmwareRequest'
 import { IDevice } from '@/types/IDevice'
 
@@ -168,9 +181,19 @@ const closeConfirmModal = () => {
     showConfirmFirmwareModal.value = false
 }
 
-const firmwareRequest: FirmwareRequest = {
-    token: localStorage.getItem('token') || ''
-}
+const isSubmitDisabled = computed(() => {
+    return (
+        !firmwareRequest.wifi_password ||
+        !firmwareRequest.wifi_ssid ||
+        deviceToUpdate.value == ''
+    )
+})
+
+const firmwareRequest: FirmwareRequest = reactive({
+    token: localStorage.getItem('token') || '',
+    wifi_ssid: '',
+    wifi_password: ''
+})
 
 const startUpgrade = async () => {
     upgradeStarted.value = true

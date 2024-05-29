@@ -40,20 +40,10 @@ export default class Firmware {
 
         return new Promise<any>((resolve, reject) => {
             axios.post(`${this.baseURL}/firmware/update/${device}`, {
-                token: firmwareRequest.token
+                token: firmwareRequest.token,
+                wifi_ssid: firmwareRequest.wifi_ssid,
+                wifi_password: firmwareRequest.wifi_password
             })
-                .then(async (response) => {
-                    resolve(response.data)
-                })
-                .catch(error => {
-                    reject(error)
-                })
-        })
-    }
-
-    async getFirmwareUpgradeProgress(device: IDevice['uuid']): Promise<number> {
-        return new Promise<number>((resolve, reject) => {
-            axios.get(`${this.baseURL}/firmware/update/${device}/progress`)
                 .then(async (response) => {
                     resolve(response.data)
                 })
