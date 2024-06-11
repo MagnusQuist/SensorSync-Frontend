@@ -44,6 +44,12 @@
             </Button>
         </div>
     </form>
+
+    <div class="w-full mt-5">
+        <Button class="w-full" variant="outline" @click="identifyDevice(device.uuid)">
+            Identify Device
+        </Button>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -96,6 +102,17 @@ const submitForm = async () => {
             notifyStore.notify("Update Failed", "Device not updated!", NotificationType.Error)
             return
         }) 
+}
+
+const identifyDevice = async (uuid: string) => {
+    await API.modules.devices.IdentifyDevice(uuid)
+        .then(() => {
+            console.log('Device is blinking')
+        }).catch((error: any) => {
+            console.log('Could not identify device')
+            console.log(error)
+            return
+        })
 }
 </script>
 
