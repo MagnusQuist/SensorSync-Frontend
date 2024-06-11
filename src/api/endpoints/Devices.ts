@@ -99,4 +99,16 @@ export default class devices {
                 })
         })
     }
+
+    async IdentifyDevice(uuid: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            axios.get(`${this.baseURL}/devices/${uuid}/identify`)
+                .then(() => {
+                    resolve()
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+        })
+    }
 }
