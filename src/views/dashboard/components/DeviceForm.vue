@@ -46,8 +46,8 @@
     </form>
 
     <div class="w-full mt-5">
-        <Button class="w-full" variant="outline" @click="identifyDevice(device.uuid)">
-            Identify Device
+        <Button :class="[ identifying ? 'identify-btn' : '', 'w-full' ]" variant="outline" :disabled="identifying ? true : false" @click="identifyDevice(device.uuid)">
+            {{ identifying ? 'Blinking for 10 seconds' : 'Identify Device' }}
         </Button>
     </div>
 </template>
@@ -67,7 +67,7 @@ import {
 } from '@/components/ui/select'
 import API from '@/api/Client'
 import { NotificationType, useNotificationStore } from '@/stores/notification.store'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 // Injects
 const notifyStore = useNotificationStore()
@@ -82,6 +82,8 @@ interface Props {
 
 // Setup
 const props = defineProps<Props>()
+
+const identifying = ref(false)
 
 const device = reactive({ ...API.modules.devices.devices.value[props.deviceUuid] })
 
@@ -106,14 +108,29 @@ const submitForm = async () => {
 
 const identifyDevice = async (uuid: string) => {
     await API.modules.devices.IdentifyDevice(uuid)
-        .then(() => {
-            console.log('Device is blinking')
+        .then(async () => {
+            identifying.value = true
         }).catch((error: any) => {
             console.log('Could not identify device')
             console.log(error)
             return
+        }).finally(async () => {
+            await setTimeout(() => {
+                identifying.value = false
+            }, 10000)
         })
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+    @keyframes border-pulsate {
+        0%   { border-color: rgba(79, 150, 243, 1); }
+        50%  { border-color: rgba(228, 228, 231, 1); }
+        100% { border-color: rgba(79, 150, 243, 1); }
+    }
+
+    .identify-btn {
+        border: 2px solid rgb(79, 150, 243);
+        animation: border-pulsate 2.6s ease-in-out infinite;
+    }
+</style>
